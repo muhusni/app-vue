@@ -14,7 +14,7 @@ import { createApp } from 'vue'
 import { registerPlugins } from '@/plugins'
 
 const app = createApp(App)
-
+// Create a new Pinia instance and install it on the app
 registerPlugins(app)
 
 app.mount('#app')

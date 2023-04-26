@@ -8,7 +8,7 @@
       </v-list> -->
         <v-img :width="135" cover class="d-flex justify-center" src="@/assets/app-vue-logo.png"></v-img>
       <v-divider></v-divider>
-      <Sidebar />
+      <TheSidebar />
     </v-navigation-drawer>
 
     <v-app-bar elevation="1">
@@ -18,7 +18,7 @@
       <template v-slot:append>
         <v-btn :icon="theme.global.current.value.dark ? 'mdi-brightness-3' : 'mdi-brightness-5'"
           @click="toggleTheme"></v-btn>
-        <Dropdown />
+        <TheDropdown />
       </template>
     </v-app-bar>
 
@@ -32,23 +32,16 @@
 
 <script setup>
 import { useAppStore } from "@/store/app";
-import { onMounted } from "vue";
 import { useTheme } from "vuetify/lib/framework.mjs";
-import Sidebar from "./TheSidebar.vue";
+import TheSidebar from "./TheSidebar.vue";
 
 // components
-import Dropdown from "./TheDropdown.vue";
+import TheDropdown from "./TheDropdown.vue";
 
 const theme = useTheme()
 
 // at start
 
-onMounted(() => {
-  const savedTheme = localStorage.getItem("theme")
-  if (savedTheme !== null) {
-    theme.global.name.value = savedTheme
-  }
-})
 const toggleTheme = () => {
   const currentTheme = theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   localStorage.setItem("theme", currentTheme)
