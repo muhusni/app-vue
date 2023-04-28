@@ -6,7 +6,7 @@
         <v-list-item title="APP VUE" class="d-flex justify-center">
         </v-list-item>
       </v-list> -->
-        <v-img :width="135" cover class="d-flex justify-center" src="@/assets/app-vue-logo.png"></v-img>
+        <v-img :width="135" cover class="mx-auto" src="@/assets/app-vue-logo.png"></v-img>
       <v-divider></v-divider>
       <TheSidebar />
     </v-navigation-drawer>

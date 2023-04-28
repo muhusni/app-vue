@@ -6,7 +6,7 @@ export const useUserStore = defineStore('user', {
         user: null,
         token: localStorage.getItem('token') || null,
         isAuthenticated: false,
-        isLoading: false
+        isLoading: true
     }),
     actions: {
         async login (email, password) {
@@ -14,8 +14,8 @@ export const useUserStore = defineStore('user', {
                 this.isLoading = true
                 const token = await authServices.login(email, password)
                 // this.user = user
-                this.token = token.token
-                localStorage.setItem('token', token.token)
+                this.token = token
+                localStorage.setItem('token', token)
                 this.isAuthenticated = true
                 this.isLoading = false
                 return true
