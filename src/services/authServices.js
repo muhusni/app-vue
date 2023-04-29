@@ -23,8 +23,8 @@ export default {
   async getUser() {
     try {
       const response = await http.get('/me')
-      const user = response.data
-      return user
+      const { status, data: user } = response
+      return { status, user }
     } catch (error) {
       console.log(error)
       throw error

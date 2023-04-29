@@ -13,7 +13,7 @@
 
           <br>
 
-          <v-btn block color="success" size="large" type="submit" variant="elevated">
+          <v-btn block color="primary" size="large" type="submit" variant="elevated">
             Sign In
           </v-btn>
         </v-form>
@@ -24,11 +24,16 @@
 <script setup>
 import { useUserStore } from "@/store/userStore";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
 
-const show = ref(false)
-const { login, isLoading} = useUserStore()
+// const show = ref(false)
+const UserStore = useUserStore()
 const router = useRouter()
+const curRouter = useRoute()
+
+const { login } = UserStore
+const { isLoading } = storeToRefs(UserStore)
 const form = ref(false)
 const email = ref('test@example.com')
 const password = ref('password')
@@ -47,7 +52,9 @@ const onSubmit = async () => {
   if (loginSuccessful) {
     // login successful, perform any additional actions such as redirecting to a dashboard page
     // loading = false
-    router.push('/home')
+    let nextUrl = curRouter.query.redirect == null ? '/home' : curRouter.query.redirect
+    // console.log(nextUrl)
+    router.push(nextUrl)
   } else {
     // login unsuccessful, show error message to the user
     // loading = false

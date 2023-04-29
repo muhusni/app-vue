@@ -7,23 +7,28 @@ import Login from "@/views/LoginView"
 import { useUserStore } from '@/store/userStore'
 
 
-const requireGuest = (to, from, next) => {
-const userStore = useUserStore()
-
-  if (userStore.isAuthenticated) {
+const requireGuest = async (to, from, next) => {
+  const userStore = useUserStore()
+  const valid = await userStore.checkTokenValidity()
+  if (valid) {
     next('/')
   } else {
     next()
   }
 }
 
-const requireAuth = (to, from, next) => {
-const userStore = useUserStore()
-
-  if (userStore.isAuthenticated) {
+const requireAuth = async (to, from, next) => {
+  const userStore = useUserStore()
+  const valid = await userStore.checkTokenValidity()
+  if (valid) {
     next()
   } else {
-    next('/login')
+    next({
+      path: '/login',
+      query: {
+        redirect: to.fullPath
+      }
+    })
   }
 }
 
@@ -45,6 +50,9 @@ const routes = [
         path: '/folder',
         name: 'My Folder',
         component: Folder,
+        meta: {
+          requiresAuth: true
+        }
       },
     ],
   },
