@@ -17,6 +17,7 @@ const requireGuest = async (to, from, next) => {
   }
 }
 
+// Untuk mengecek sudah/belum login, kalo belum login dulu Bang.
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore()
   const valid = await userStore.checkTokenValidity()

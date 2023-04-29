@@ -27,11 +27,13 @@ export const useUserStore = defineStore('user', {
       }
     },
     async logout() {
-      const response = await authServices.logout()
+        this.isLoading = true
+        const response = await authServices.logout()
       if (response.status === 200) {
         localStorage.removeItem('token')
         this.token = null
         this.isTokenValid = false
+        this.isLoading = false
         return true
       } else {
         return false

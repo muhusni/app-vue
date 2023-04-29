@@ -2,18 +2,18 @@
   <div class="d-flex justify-center align-center border-b" style="height:100vh">
     <v-card title="Login" width="450" class="" :loading="isLoading" :disabled="isLoading">
       <v-card-text>
-        <v-alert class="px-3" v-if="alert" type="error" dismissible dense outlined>Email/Password yang anda masukan
+        <v-alert class="mb-3 px-3" v-if="alert" type="error" dismissible dense outlined>Email/Password yang anda masukan
           salah</v-alert>
         <v-form v-model="form" @submit.prevent="onSubmit">
-          <v-text-field v-model="email" :readonly="isLoading" :rules="[required]" class="mb-2" clearable
+          <v-text-field v-model="email" name="email" :readonly="isLoading" :rules="[required]" class="mb-2" clearable
             label="email"></v-text-field>
 
-          <v-text-field v-model="password" type="password" :readonly="isLoading" :rules="[required]" clearable
+          <v-text-field v-model="password" name="password" type="password" :readonly="isLoading" :rules="[required]" clearable
             label="Password" placeholder="Enter your password"></v-text-field>
 
           <br>
 
-          <v-btn block color="primary" size="large" type="submit" variant="elevated">
+          <v-btn block color="secondary" :disabled="form" size="large" type="submit" variant="elevated">
             Sign In
           </v-btn>
         </v-form>
@@ -48,6 +48,7 @@ const required = (v) => !!v || 'Field is required'
 
 const onSubmit = async () => {
   // router.push('/home')
+  // if (!form.value) return
   const loginSuccessful = await login(email.value, password.value)
   if (loginSuccessful) {
     // login successful, perform any additional actions such as redirecting to a dashboard page

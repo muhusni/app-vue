@@ -6,7 +6,7 @@
         <v-list-item title="APP VUE" class="d-flex justify-center">
         </v-list-item>
       </v-list> -->
-        <v-img :width="135" cover class="mx-auto" src="@/assets/app-vue-logo.png"></v-img>
+      <v-img :width="135" cover class="mx-auto" src="@/assets/app-vue-logo.png"></v-img>
       <v-divider></v-divider>
       <TheSidebar />
     </v-navigation-drawer>
@@ -16,8 +16,8 @@
       <v-toolbar-title v-if="!AppStore.drawer">App Vue</v-toolbar-title>
       <v-spacer></v-spacer>
       <template v-slot:append>
-        <v-btn :icon="theme.global.current.value.dark ? 'mdi-brightness-3' : 'mdi-brightness-5'"
-          @click="toggleTheme"></v-btn>
+        <!-- <v-btn :icon="theme.global.current.value.dark ? 'mdi-brightness-3' : 'mdi-brightness-5'"
+          @click="toggleTheme"></v-btn> -->
         <TheDropdown />
       </template>
     </v-app-bar>
@@ -32,20 +32,9 @@
 
 <script setup>
 import { useAppStore } from "@/store/app";
-import { useTheme } from "vuetify/lib/framework.mjs";
 import TheSidebar from "./TheSidebar.vue";
 
 // components
 import TheDropdown from "./TheDropdown.vue";
-
-const theme = useTheme()
-
-// at start
-
-const toggleTheme = () => {
-  const currentTheme = theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-  localStorage.setItem("theme", currentTheme)
-  return currentTheme
-}
 const AppStore = useAppStore()
 </script>
