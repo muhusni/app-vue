@@ -56,14 +56,14 @@ export const useUserStore = defineStore('user', {
             return true
           } else {
             // token is invalid, log the user out and redirect to login page
-            this.logout()
+            // this.logout()
             router.push('/login')
             return false
           }
         } catch (error) {
           console.error(error)
           // failed to check token validity, redirect to login page
-          this.logout()
+          // this.logout()
           router.push('/login')
           return false
         }

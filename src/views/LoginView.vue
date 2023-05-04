@@ -5,8 +5,8 @@
         <v-alert class="mb-3 px-3" v-if="alert" type="error" dismissible dense outlined>Email/Password yang anda masukan
           salah</v-alert>
         <v-form v-model="form" @submit.prevent="onSubmit">
-          <v-text-field v-model="email" name="email" :readonly="isLoading" :rules="[required]" class="mb-2" clearable
-            label="email"></v-text-field>
+          <v-text-field v-model="username" name="username" :readonly="isLoading" :rules="[required]" class="mb-2" clearable
+            label="username"></v-text-field>
 
           <v-text-field v-model="password" name="password" type="password" :readonly="isLoading" :rules="[required]" clearable
             label="Password" placeholder="Enter your password"></v-text-field>
@@ -35,7 +35,7 @@ const curRouter = useRoute()
 const { login } = UserStore
 const { isLoading } = storeToRefs(UserStore)
 const form = ref(false)
-const email = ref('test@example.com')
+const username = ref('test@example.com')
 const password = ref('password')
 const alert = ref(false)
 // const rules = reactive({
@@ -49,7 +49,7 @@ const required = (v) => !!v || 'Field is required'
 const onSubmit = async () => {
   // router.push('/home')
   // if (!form.value) return
-  const loginSuccessful = await login(email.value, password.value)
+  const loginSuccessful = await login(username.value, password.value)
   if (loginSuccessful) {
     // login successful, perform any additional actions such as redirecting to a dashboard page
     // loading = false

@@ -1,10 +1,10 @@
 import http from '@/services/http'
 
 export default {
-  async login(email, password) {
+  async login(username, password) {
     try {
-      const response = await http.post('/login', { email, password })
-      const token = response.data
+      const response = await http.post('/login', { username, password })
+      const token = response.data.token
       return token
     } catch (error) {
       console.log(error)
