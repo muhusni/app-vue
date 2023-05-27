@@ -5,11 +5,13 @@ import Home from '@/views/app/HomeView'
 import Folder from '@/views/app/MyFolderView'
 import Login from "@/views/LoginView"
 import { useUserStore } from '@/store/userStore'
+import Bank from "@/views/app/BankView"
 
 
 const requireGuest = async (to, from, next) => {
   const userStore = useUserStore()
   const valid = await userStore.checkTokenValidity()
+  // const valid = userStore.isTokenValid
   if (valid) {
     next('/')
   } else {
@@ -21,6 +23,7 @@ const requireGuest = async (to, from, next) => {
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore()
   const valid = await userStore.checkTokenValidity()
+  // const valid = userStore.isTokenValid
   if (valid) {
     next()
   } else {
@@ -51,6 +54,14 @@ const routes = [
         path: '/folder',
         name: 'My Folder',
         component: Folder,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/master/bank',
+        name: 'Bank',
+        component: Bank,
         meta: {
           requiresAuth: true
         }

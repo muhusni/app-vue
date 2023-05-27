@@ -42,10 +42,10 @@ export const useUserStore = defineStore('user', {
     async checkTokenValidity() {
       if (this.token !== null) {
         // check the cached token validity status
-        if (this.isTokenValid) {
-          // token is valid, allow access to protected routes
-          return true
-        }
+        // if (this.isTokenValid) {
+        //   // token is valid, allow access to protected routes
+        //   return true
+        // }
 
         // make a request to the backend server to check the token validity
         try {
@@ -57,11 +57,15 @@ export const useUserStore = defineStore('user', {
           } else {
             // token is invalid, log the user out and redirect to login page
             // this.logout()
+            localStorage.removeItem("token")
+            this.isTokenValid = false
             router.push('/login')
             return false
           }
         } catch (error) {
           console.error(error)
+          localStorage.removeItem("token")
+          this.isTokenValid = false
           // failed to check token validity, redirect to login page
           // this.logout()
           router.push('/login')
