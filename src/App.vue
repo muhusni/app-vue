@@ -1,10 +1,12 @@
 <template>
   <router-view />
+  <TheSnackbar />
 </template>
 
 <script setup>
 import { useTheme } from 'vuetify/lib/framework.mjs';
 import { onMounted } from 'vue';
+import TheSnackbar from './components/TheSnackbar.vue';
 //
 const theme = useTheme()
 onMounted(() => {

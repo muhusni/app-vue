@@ -31,11 +31,13 @@ import { useRouter } from "vue-router"
 import { ref } from "vue";
 import { useTheme } from "vuetify/lib/framework.mjs";
 import { storeToRefs } from "pinia";
+import { useAppStore } from "@/store/app";
 
 
 const { logout } = useUserStore()
 const { isLoading } = storeToRefs(useUserStore())
 const router = useRouter()
+const { snackbarAct } = useAppStore()
 
 const theme = useTheme()
 // const currentTheme = theme.global.name.value = theme.global.current.value.dark ? true : false
@@ -49,6 +51,11 @@ const toggleTheme = () => {
 
 const logoutHandle = async () => {
   const isLogout = await logout()
-  if (isLogout) router.push('/login')
+  if (isLogout) {
+    router.push('/login')
+    snackbarAct(true, 'Berhasil Logout', 'success')
+  }
 }
+
+
 </script>
