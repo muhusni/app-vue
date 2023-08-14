@@ -12,7 +12,8 @@ import { reactive } from "vue";
 const menu = reactive([
   { title: "Home", icon: "mdi-home", to: "/home" },
   { title: "My Folder", icon: "mdi-folder", to: "/folder" },
-  { title: "User Management", icon: "mdi-account-multiple", to: "/user" }
+  { title: "User Management", icon: "mdi-account-multiple", to: "/user" },
+  { title: "Tiket BC Soetta", icon: "mdi-ticket-account", to: "/tiket" }
 ])
 
 </script>

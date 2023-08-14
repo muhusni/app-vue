@@ -4,6 +4,7 @@ import AppBar from "@/layouts/default/TheAppBar"
 import Home from '@/views/app/HomeView'
 import Folder from '@/views/app/MyFolderView'
 import Login from "@/views/LoginView"
+import Tiket from "@/views/app/TiketView/TiketView"
 import { useUserStore } from '@/store/userStore'
 
 
@@ -51,6 +52,14 @@ const routes = [
         path: '/folder',
         name: 'My Folder',
         component: Folder,
+        meta: {
+          requiresAuth: true
+        }
+      },      
+      {
+        path: '/tiket',
+        name: 'Tiket BC Soetta',
+        component: Tiket,
         meta: {
           requiresAuth: true
         }

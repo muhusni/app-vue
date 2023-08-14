@@ -48,25 +48,28 @@ export const useUserStore = defineStore('user', {
         }
 
         // make a request to the backend server to check the token validity
-        try {
-          const response = await authServices.getUser()
-          if (response.status === 200) {
-            // token is valid, set the cached token validity status to true
-            this.isTokenValid = true
-            return true
-          } else {
-            // token is invalid, log the user out and redirect to login page
-            // this.logout()
-            router.push('/login')
-            return false
-          }
-        } catch (error) {
-          console.error(error)
-          // failed to check token validity, redirect to login page
+        // try {
+        const response = await authServices.getUser()
+        if (response) {
+          // token is valid, set the cached token validity status to true
+          this.isTokenValid = true
+          return true
+        } else {
+          // token is invalid, log the user out and redirect to login page
           // this.logout()
-          router.push('/login')
+          this.isTokenValid = false
+          localStorage.removeItem('token')
+          // router.push('/login')
           return false
         }
+        // } catch (error) {
+        //   console.error("sini")
+        //   // failed to check token validity, redirect to login page
+        //   // this.logout()
+        //   localStorage.removeItem('token')
+        //   router.push('/login')
+        //   return false
+        // }
       } else {
         // if the user is not authenticated or there is no token, allow access to unprotected routes
         return false
