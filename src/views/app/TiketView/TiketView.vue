@@ -1,10 +1,11 @@
 <template>
     <v-card title="Tiket BC Soetta" :loading="loading">
-        <v-card-text >
+        <v-card-text>
             <v-row justify="center" class="mb-2">
                 <v-col cols="6">
-                    <v-text-field  density="compact" v-model="tiketId" class="" variant="outlined" label="Cari Nomor Tiket"
-                        append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="cariTiket"></v-text-field>
+                    <v-text-field density="compact" v-model="tiketId" class="" variant="outlined" label="Cari Nomor Tiket"
+                        append-inner-icon="mdi-magnify" single-line hide-details
+                        @click:append-inner="cariTiket"></v-text-field>
                 </v-col>
             </v-row>
             <v-card title="Detail Tiket" class="mb-5">
@@ -12,19 +13,22 @@
                     <table>
                         <tr>
                             <td>Nomor Tiket</td>
-                            <td>: {{  TiketStore.tiket.ID }}</td>
+                            <td>: {{ TiketStore.tiket.ID }}</td>
                         </tr>
                         <tr>
                             <td>Kategori</td>
-                            <td>: {{ TiketStore.tiket.categoryid}}</td>
+                            <td>: {{ TiketStore.tiket.categoryid }}</td>
                         </tr>
                         <tr>
                             <td>Permasalahan</td>
-                            <td>: <div v-html="TiketStore.tiket.body"></div></td>
+                            <td>: <div v-html="TiketStore.tiket.body"></div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Jumlah Aju</td>
-                            <td>: </td>
+                            <td>: {{ regex.length }} <br>
+                                <span v-for="r in regex"> {{ r.replace(/\D/g, '') }} <br></span>
+                            </td>
                         </tr>
                     </table>
                 </v-card-text>
@@ -38,13 +42,17 @@
 <script setup>
 import { ref } from 'vue'
 import { useTiketStore } from '@/store/tiketStore'
-import { reactive } from 'vue'
+
 const loading = ref(false)
 const tiketId = ref('')
-const tiketData = ref([])
+const regex = ref([])
 const TiketStore = useTiketStore()
-const  cariTiket = async () => {
+const cariTiket = async () => {
     await TiketStore.getTiket(tiketId.value)
+    regex.value = TiketStore.tiket.body.match(/[\d]{6}-[\d]{6}-[\d]{8}-[\d]{6}|[\d]{26}/g)
+    regex.forEach(element => {
+                
+    });
 }
 </script>
   
