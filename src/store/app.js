@@ -10,6 +10,7 @@ export const useAppStore = defineStore('app', {
       text: '',
       color: ''
     },
+    isLoading: false
     //
   }),
   actions: {

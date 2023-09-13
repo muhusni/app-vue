@@ -9,6 +9,8 @@ import { loadFonts } from './webfontloader'
 import vuetify from './vuetify'
 import pinia from '../store'
 import router from '../router'
+import axios from 'axios'
+import { VueClipboard } from '@soerenmartius/vue3-clipboard'
 
 export function registerPlugins (app) {
   loadFonts()
@@ -16,4 +18,6 @@ export function registerPlugins (app) {
     .use(vuetify)
     .use(pinia)
     .use(router)
+    .use(VueClipboard)
+    .use(axios)
 }
