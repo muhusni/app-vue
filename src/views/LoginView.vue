@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-center align-center border-b" style="height:100vh">
+  <div class="d-flex justify-center align-center border-b pa-5" style="height:100vh">
     <v-card title="Login" width="450" class="" :loading="isLoading" :disabled="isLoading">
       <v-card-text>
         <v-alert class="mb-3 px-3" v-if="alert" type="error" dismissible dense outlined>Email/Password yang anda masukan

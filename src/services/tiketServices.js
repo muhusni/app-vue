@@ -11,7 +11,6 @@ export default {
       // throw errorf 
     }
   },
-  
   async getPib (id) {
     const response = await http.get(`/pib/${id}`)
     const data = response.data
@@ -21,5 +20,6 @@ export default {
     const response = await http.get(`/peb/${id}`)
     const data = response.data
     return data
-  }
+  },
+
 }

@@ -44,45 +44,45 @@
             </v-card>
             <v-row>
                 <v-col cols="12" sm="9">
-                    <v-card title="INSW" class="card-left bgreen mb-5" elevation="5">
-                        <v-card-text>
-                            <v-data-table v-model="selectedAju" :headers="headers" show-select hover :items="ajuFinal"
-                                class="elevation-1">
-                            </v-data-table>
-                        </v-card-text>
-                    </v-card>
+                    <InswTable />
+                    <Ceisa40Table />
                 </v-col>
                 <v-col cols="12" sm="3">
-                    <TemplateLaporan elevation="5" class="card-left bgreen mb-5" />
+                    <TemplateLaporan />
                 </v-col>
             </v-row>
         </v-card-text>
     </v-card>
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useTiketStore } from '@/store/tiketStore'
 import { useAppStore } from "@/store/app";
+import { useCeisa40Store } from '@/store/ceisa40Store';
 import { storeToRefs } from "pinia";
 import TemplateLaporan from "@/views/app/TiketView/TemplateLaporan.vue"
+import InswTable from "@/components/InswTable"
+import Ceisa40Table from '@/components/Ceisa40Table.vue';
 
 const tiketId = ref('');
 const regex = ref([]);
 const TiketStore = useTiketStore();
-const { ajuFinal, selectedAju } = storeToRefs(TiketStore)
+const Ceisa40Store = useCeisa40Store();
 const { snackbarAct } = useAppStore();
 let { isLoading } = storeToRefs(useAppStore())
 
 const cariTiket = async () => {
     if (tiketId.value === '') return;
+    TiketStore.clearData()
+    Ceisa40Store.clearData()
     isLoading.value = true
     try {
         await TiketStore.getTiket(tiketId.value);
-        if (TiketStore.tiket.body.match(/[\d]{6}-?[\d]{6}-?[\d]{8}-?[\d]{6}/g) === null) {
+        if (TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) === null) {
             isLoading.value = false
             return
         }
-        regex.value = TiketStore.tiket.body.match(/[\d]{6}-?[\d]{6}-?[\d]{8}-?[\d]{6}/g).map((x) => x.replace(/\D/g, ''));
+        regex.value = TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g).map((x) => x.replace(/\-/g, ''));
         isLoading.value = false
         regex.value.forEach((e) => {
             if (TiketStore.cekDokumen(TiketStore.tiket.categoryid) === 'PIB') {
@@ -90,6 +90,7 @@ const cariTiket = async () => {
             } else {
                 TiketStore.getPeb(e);
             }
+            Ceisa40Store.getDokumenCeisa40(e);
         });
     } catch (e) {
         console.log(e)
@@ -99,41 +100,11 @@ const cariTiket = async () => {
     // console.log(regex)
 }
 
+onMounted(() => {
+    TiketStore.clearData()
+    Ceisa40Store.clearData()
+})
 // const cekDokumen = (kategori) => kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '');
-
-const headers = [
-    { title: 'CAR', key: 'car' },
-    { title: 'Kode Kantor', key: 'kd_kantor' },
-    { title: 'Nama Perusahaan', key: 'nm_perusahaan' },
-    { title: 'Nama PPJK', key: 'nm_ppjk' },
-    { title: 'Status', key: 'status' },
-    { title: 'Tgl. Respon', key: 'tgl_respon' },
-];
-watch(TiketStore.listAju, () => {
-    ajuFinal.value = TiketStore.listAju.map((array) => {
-        if (array.data.length !== 0) {
-            return {
-                car: array.data.data_header[array.data.data_header.length - 1].car,
-                kd_kantor: array.data.data_header[array.data.data_header.length - 1].kd_kantor,
-                nm_perusahaan: array.data.length !== 0 ? (TiketStore.cekDokumen(TiketStore.tiket.categoryid) === 'PIB' ?
-                    array.data.data_header[array.data.data_header.length - 1].nm_importir :
-                    array.data.data_header[array.data.data_header.length - 1].nm_exportir) : '',
-                nm_ppjk: array.data.data_header[array.data.data_header.length - 1].ppjk,
-                status: array.data.data_header[array.data.data_header.length - 1].status.replace(/<br>.+/g, ''),
-                tgl_respon: array.data.data_header[array.data.data_header.length - 1].tgl_respon,
-            }
-        } else {
-            return {
-                car: array.aju,
-                kd_kantor: "",
-                nm_perusahaan: "",
-                nm_ppjk: "",
-                status: "Tidak ada di INSW",
-                tgl_respon: "",
-            };
-        }
-    })
-}, { deep: true });
 
 </script>
 <style scoped>

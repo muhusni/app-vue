@@ -5,6 +5,9 @@ import Home from '@/views/app/HomeView'
 import Folder from '@/views/app/MyFolderView'
 import Login from "@/views/LoginView"
 import Tiket from "@/views/app/TiketView/TiketView"
+import Insw from "@/views/app/InswView"
+import Ceisa40PreRespon from "@/views/app/Ceisa40PreResponView"
+import Dashboard from "@/views/app/Dashboard"
 import { useUserStore } from '@/store/userStore'
 
 
@@ -21,6 +24,7 @@ const requireGuest = async (to, from, next) => {
 // Untuk mengecek sudah/belum login, kalo belum login dulu Bang.
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore()
+  // const valid = true
   const valid = await userStore.checkTokenValidity()
   if (valid) {
     next()
@@ -60,6 +64,30 @@ const routes = [
         path: '/tiket',
         name: 'Tiket BC Soetta',
         component: Tiket,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/insw',
+        name: 'INSW',
+        component: Insw,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/ceisa40prerespon',
+        name: 'Ceisa 40 Pre-Respon',
+        component: Ceisa40PreRespon,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/dashboard',
+        name: 'Dashboard Duktek',
+        component: Dashboard,
         meta: {
           requiresAuth: true
         }

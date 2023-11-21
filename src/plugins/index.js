@@ -17,7 +17,7 @@ export function registerPlugins (app) {
   app
     .use(vuetify)
     .use(pinia)
-    .use(router)
+    .use(router, axios)
     .use(VueClipboard)
-    .use(axios)
+    // .use()
 }

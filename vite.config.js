@@ -23,7 +23,8 @@ export default defineConfig({
   define: { 'process.env': {} },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      vue: 'vue/dist/vue.esm-bundler.js',
     },
     extensions: [
       '.js',
@@ -40,5 +41,6 @@ export default defineConfig({
     watch: {
       usePolling: true
     }
-  }
+  },
+  base:'./',
 })
