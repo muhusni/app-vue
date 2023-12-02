@@ -35,7 +35,7 @@
                             <tr>
                                 <td>Detail Aju</td>
                                 <td>
-                                    <span v-for="r in regex"> {{ r }}<br></span>
+                                    <span v-for="r in regex" :key="r"> {{ r }}<br></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -43,9 +43,12 @@
                 </v-card-text>
             </v-card>
             <v-row>
-                <v-col cols="12" sm="9">
+                <v-col v-if="TiketStore.tiket.categoryid !== 13" cols="12" sm="9">
                     <InswTable />
                     <Ceisa40Table />
+                </v-col>
+                <v-col v-else cols="12" sm="9">
+                  <BarkirTable />
                 </v-col>
                 <v-col cols="12" sm="3">
                     <TemplateLaporan />
@@ -63,6 +66,7 @@ import { storeToRefs } from "pinia";
 import TemplateLaporan from "@/views/app/TiketView/TemplateLaporan.vue"
 import InswTable from "@/components/InswTable"
 import Ceisa40Table from '@/components/Ceisa40Table.vue';
+import BarkirTable from "@/components/BarkirTable.vue"
 
 const tiketId = ref('');
 const regex = ref([]);
@@ -76,8 +80,18 @@ const cariTiket = async () => {
     TiketStore.clearData()
     Ceisa40Store.clearData()
     isLoading.value = true
-    try {
-        await TiketStore.getTiket(tiketId.value);
+    await TiketStore.getTiket(tiketId.value);
+    if (TiketStore.tiket.categoryid === 13) {
+      prosesCn()
+    } else {
+      prosesPib()
+    }
+    // console.log(regex)
+}
+
+const prosesPib = async () => {
+  try {
+
         if (TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) === null) {
             isLoading.value = false
             return
@@ -92,12 +106,29 @@ const cariTiket = async () => {
             }
             Ceisa40Store.getDokumenCeisa40(e);
         });
-    } catch (e) {
-        console.log(e)
-        snackbarAct(true, "Data tidak ditemukan", "red");
+      } catch (e) {
+          console.log(e)
+          snackbarAct(true, "Data tidak ditemukan", "red");
+          isLoading.value = false
+      }
+}
+
+const prosesCn = async () => {
+  try {
+        // if (TiketStore.tiket.body.match(/[0-9A-Z]{10,}/g) === null) {
+        //     isLoading.value = false
+        //     return
+        // }
+        regex.value = await TiketStore.tiket.body.match(/(?=[A-Z]?\d)[0-9A-Za-z]{10,}/g);
+        // .map((x) => x.replace(/\-/g, ''));
+        TiketStore.cekBarkir(regex.value)
         isLoading.value = false
-    }
-    // console.log(regex)
+        console.log(regex.value)
+      } catch (e) {
+          console.log(e)
+          snackbarAct(true, "Data tidak ditemukan", "red");
+          isLoading.value = false
+      }
 }
 
 onMounted(() => {

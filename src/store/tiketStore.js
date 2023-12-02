@@ -10,7 +10,8 @@ export const useTiketStore = defineStore('tiket', {
     listAju: [],
     ajuFinal: [],
     selectedAju: [],
-    noTiketIkc: ''
+    noTiketIkc: '',
+    listBarkir: []
   }),
   actions: {
     async getTiket(id) {
@@ -44,7 +45,10 @@ export const useTiketStore = defineStore('tiket', {
     },
     // const cekDokumen = (kategori) => kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '')
     cekDokumen (kategori) {
-      return kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '')
+      if (kategori === 13) return 'Barkir CN/PIBK'
+      if (kategori === 6 || kategori === 18 || kategori === 24) return 'PIB'
+      if (kategori === 7 || kategori === 20 || kategori === 25) return 'PEB'
+      return null
     },
 
     async laporIkc (message, judulIkc) {
@@ -74,9 +78,16 @@ export const useTiketStore = defineStore('tiket', {
       return tiket
     },
 
+    async cekBarkir(data) {
+      const barkir = await axios.post('http://192.168.146.99:5000/barkir', { "AWB" : data})
+      this.listBarkir = barkir.data
+      return barkir
+    },
+
     clearData () {
       this.listAju.length = 0
       this.selectedAju.length = 0
+      this.listBarkir.length = 0
     }
   }
 })
