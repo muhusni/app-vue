@@ -1,8 +1,8 @@
 <template>
   <v-card title="INSW" class="card-left bgreen mb-5" elevation="5">
     <v-card-text>
-      <v-data-table item-value="car" show-expand v-model="selectedAju" :headers="headers"
-        show-select return-object hover :items="ajuFinal" class="elevation-1">
+      <v-data-table item-value="car" show-expand v-model="selectedAju" :headers="headers" show-select return-object hover
+        :items="ajuFinal" class="elevation-1">
         <template v-slot:expanded-row="{ item }">
           <template v-for="aju in TiketStore.listAju" :key="aju">
             <template v-if="aju.data.data_header[0].car === item.value.car">
@@ -14,7 +14,7 @@
               </tr>
               <tr v-for="(detail, index) in aju.data.data_detail" :key="detail.status">
                 <td></td>
-                <td> {{  index }}</td>
+                <td> {{ index + 1 }}</td>
                 <td :colspan="2">{{ detail.remarks }}</td>
                 <td :colspan="4">
                   <div class="d-flex justify-center">{{ detail.tanggal }}</div>
