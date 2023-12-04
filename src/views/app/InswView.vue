@@ -34,13 +34,13 @@ const TiketStore = useTiketStore();
 const { snackbarAct } = useAppStore();
 
 const getDokumen = async () => {
-    if (noAju.value.replace(/\D/g, '').length !== 26) {
+    if (noAju.value.replace(/[^0-9A-Z]/g, '').length !== 26) {
         snackbarAct(true, "Nomor Aju harus 26 digit angka", "red")
         return
     }
     TiketStore.clearData()
     isLoading.value = true
-    jenisDokumen.value == 'PEB' ? await TiketStore.getPeb(noAju.value.replace(/\D/g, '')) : await TiketStore.getPib(noAju.value.replace(/\D/g, ''))  
+    jenisDokumen.value == 'PEB' ? await TiketStore.getPeb(noAju.value.replace(/[^0-9A-Z]/g, '')) : await TiketStore.getPib(noAju.value.replace(/[^0-9A-Z]/g, ''))
     isLoading.value = false
 }
 
