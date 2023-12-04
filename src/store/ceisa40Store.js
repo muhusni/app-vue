@@ -36,7 +36,7 @@ export const useCeisa40Store = defineStore('ceisa40', {
     async getDokumenCeisa40PreRespon() {
       this.dokCeisa40.length = 0
       const dokCeisa40 = await http.get(`/ceisa40/dokumen/v1`)
-      this.dokCeisa40.push(...dokCeisa40.data.data.filter((aju) => aju.nomorAju.substring(16, 18) === (new Date().getMonth()+1).toString()))
+      this.dokCeisa40.push(...dokCeisa40.data.data.filter((aju) => (aju.nomorAju.substring(16, 18) === (new Date().getMonth()+1).toString()) && aju.nomorAju.substring(12, 16) !== '2022'))
       return dokCeisa40
     },
     async getPdfCeisa40(idHeader, idRespon) {
@@ -68,7 +68,7 @@ export const useCeisa40Store = defineStore('ceisa40', {
     },
     async getJumlahDokumen(kodeDokumen) {
       const jumlahDokumen = await http.get(`ceisa40/dokumen/jumlah/${kodeDokumen}`);
-      return jumlahDokumen;
+      return jumlahDokumen.data;
     },
     // const cekDokumen = (kategori) => kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '')
     clearData () {

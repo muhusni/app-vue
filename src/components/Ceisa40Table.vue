@@ -25,13 +25,13 @@
                         </v-icon> Draf</a> -->
                     <v-chip-group color="blue">
                         <a v-if="dokCeisa40[item.index].idRespon !== null"
-                            :href="`http://192.168.146.99/api/ceisa40/download/${dokCeisa40[item.index].idHeader}/${dokCeisa40[item.index].idRespon}`"><v-chip>
+                            :href="`${app.defaults.baseURL}/ceisa40/download/${dokCeisa40[item.index].idHeader}/${dokCeisa40[item.index].idRespon}`"><v-chip>
                                 <v-icon size="small" class="me-2">
                                     mdi-download
                                 </v-icon> Respon</v-chip>
                         </a>
                         <a
-                            :href="`http://192.168.146.99/api/ceisa40/download/draf/${dokCeisa40[item.index].kodeDokumen}/${dokCeisa40[item.index].idHeader}`"><v-chip>
+                            :href="`${app.defaults.baseURL}/ceisa40/download/draf/${dokCeisa40[item.index].kodeDokumen}/${dokCeisa40[item.index].idHeader}`"><v-chip>
                                 <v-icon size="small" class="me-2">
                                     mdi-download
                                 </v-icon> Draf</v-chip>
@@ -70,7 +70,9 @@ import { ref, watch } from 'vue';
 import { storeToRefs } from "pinia";
 import { useCeisa40Store } from '@/store/ceisa40Store';
 import { useAppStore } from '@/store/app';
+import http from '@/services/http';
 
+const app = http;
 const appStore = useAppStore();
 const { dokCeisa40, getRiwayatRespon, getRiwayatStatus, kirimUlangINSW } = useCeisa40Store();
 const { tabRespon, idHeaderCurrent, nomorAjuCurrent, selectedAju, getPenerimaanDokumen } = storeToRefs(useCeisa40Store())

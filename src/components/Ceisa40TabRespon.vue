@@ -30,12 +30,12 @@
                                             <td>{{ reformatDate(item.waktuRespon) }}</td>
                                             <td>
                                                 <v-chip v-if="item.idRespon !== null" style="cursor: pointer;"
-                                                    :href="`http://192.168.146.99/api/ceisa40/download/${item.idHeader}/${item.idRespon}`">
+                                                    :href="`${app.defaults.baseURL}/ceisa40/download/${item.idHeader}/${item.idRespon}`">
                                                     <v-icon size="small">
                                                         mdi-download
                                                     </v-icon></v-chip>
                                                 <v-chip v-else style="cursor: pointer;"
-                                                    :href="`http://192.168.146.99/api/ceisa40/download/awal/${item.nomorAju}/${item.idResponAwal}`">
+                                                    :href="`${app.defaults.baseURL}/ceisa40/download/awal/${item.nomorAju}/${item.idResponAwal}`">
                                                     <v-icon size="small">
                                                         mdi-download
                                                     </v-icon></v-chip>
@@ -82,12 +82,13 @@
 import { useCeisa40Store } from '@/store/ceisa40Store';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
+import http from '@/services/http';
 const { tabRespon, riwayatRespon, riwayatStatus } = storeToRefs(useCeisa40Store())
 const closeDialog = () => {
     tabRespon.value = false
 }
 
-
+const app = http;
 const tab = ref(null);
 const reformatDate = (dateString) => {
     if (!dateString) return null;

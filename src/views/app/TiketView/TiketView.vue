@@ -82,95 +82,101 @@ const { snackbarAct } = useAppStore();
 let { isLoading } = storeToRefs(useAppStore())
 
 const cariTiket = async () => {
-  if (tiketId.value === '') return;
-  TiketStore.clearData()
-  Ceisa40Store.clearData()
-  isLoading.value = true
-  await TiketStore.getTiket(tiketId.value);
-  if (TiketStore.tiket.categoryid === 13) {
-    prosesCn()
-  } else {
-    prosesPib()
-  }
-  // console.log(regex)
+    if (tiketId.value === '') return;
+    TiketStore.clearData()
+    Ceisa40Store.clearData()
+    isLoading.value = true
+    await TiketStore.getTiket(tiketId.value);
+    if (TiketStore.tiket.categoryid === 13) {
+        prosesCn()
+    } else {
+        prosesPib()
+    }
+    // console.log(regex)
 }
 
 const prosesPib = async () => {
-  try {
+    try {
 
-    if (TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) === null) {
-      isLoading.value = false
-      return
+        if (TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) === null) {
+            isLoading.value = false
+            return
+        }
+        regex.value = await TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g).map((x) => x.replace(/\-/g, ''));
+        regex.value = [ ...new Set(regex.value)]
+        isLoading.value = false
+        regex.value.forEach((e) => {
+            if (TiketStore.cekDokumen(TiketStore.tiket.categoryid) === 'PIB') {
+                TiketStore.getPib(e);
+            } else {
+                TiketStore.getPeb(e);
+            }
+            Ceisa40Store.getDokumenCeisa40(e);
+        });
+    } catch (e) {
+        console.log(e)
+        snackbarAct(true, "Data tidak ditemukan", "red");
+        isLoading.value = false
     }
-    regex.value = TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g).map((x) => x.replace(/\-/g, ''));
-    isLoading.value = false
-    regex.value.forEach((e) => {
-      if (TiketStore.cekDokumen(TiketStore.tiket.categoryid) === 'PIB') {
-        TiketStore.getPib(e);
-      } else {
-        TiketStore.getPeb(e);
-      }
-      Ceisa40Store.getDokumenCeisa40(e);
-    });
-  } catch (e) {
-    console.log(e)
-    snackbarAct(true, "Data tidak ditemukan", "red");
-    isLoading.value = false
-  }
 }
 
 const prosesCn = async () => {
-  try {
-    // if (TiketStore.tiket.body.match(/[0-9A-Z]{10,}/g) === null) {
-    //     isLoading.value = false
-    //     return
-    // }
-    regex.value = await TiketStore.tiket.body.match(/(?=[A-Z]?\d)[0-9A-Za-z]{10,}/g);
-    // .map((x) => x.replace(/\-/g, ''));
-    TiketStore.cekBarkir(regex.value)
-    isLoading.value = false
-    console.log(regex.value)
-  } catch (e) {
-    console.log(e)
-    snackbarAct(true, "Data tidak ditemukan", "red");
-    isLoading.value = false
-  }
+    try {
+        // if (TiketStore.tiket.body.match(/[0-9A-Z]{10,}/g) === null) {
+        //     isLoading.value = false
+        //     return
+        // }
+        regex.value = await TiketStore.tiket.body.match(/(?=\d{0,}?[A-Z]{0,}?\d)[0-9A-Za-z]{9,}/g);
+        regex.value = [ ...new Set(regex.value)]
+        // .map((x) => x.replace(/\-/g, ''));
+        TiketStore.cekBarkir(regex.value).then((response) => {
+            snackbarAct(true, "Data ditemukan", "green");
+        }).catch(() => {
+            snackbarAct(true, "Error, silakan coba lagi", "red");
+        })
+        isLoading.value = false
+        console.log(regex.value)
+    } catch (e) {
+        console.log(e)
+        snackbarAct(true, "Data tidak ditemukan", "red");
+        isLoading.value = false
+    }
 }
 
 onMounted(() => {
-  TiketStore.clearData()
-  Ceisa40Store.clearData()
+    TiketStore.clearData()
+    Ceisa40Store.clearData()
 })
 // const cekDokumen = (kategori) => kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '');
 
 </script>
 <style scoped>
 .jarak {
-  padding-top: 20px;
-  padding-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .card-top {
-  border-top: 3px solid;
+    border-top: 3px solid;
 }
 
 .card-left {
-  border-left: 3px solid
+    border-left: 3px solid
 }
 
 .bgreen {
-  border-color: green;
+    border-color: green;
 }
 
 .bred {
-  border-color: red;
+    border-color: red;
 }
 
 .bblue {
-  border-color: blue;
+    border-color: blue;
 }
 
 .bpurple {
-  border-color: purple
+    border-color: purple
 }
 </style>

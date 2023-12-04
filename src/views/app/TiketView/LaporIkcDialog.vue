@@ -91,11 +91,11 @@ const tiketProses = ref([
 const selectedProcessObj = computed(() => tiketProses.value.find(process => process.namaProses === dataTiket.bisnisProses) || { subProses: [] });
 
 const updateSubprocesses = () => {
-  dataTiket.subProses = ''; // Reset the selected subprocess when the process changes
+    dataTiket.subProses = ''; // Reset the selected subprocess when the process changes
 };
 
 watch(() => dataTiket.bisnisProses, () => {
-  updateSubprocesses();
+    updateSubprocesses();
 });
 
 
@@ -117,14 +117,15 @@ const openDialog = () => {
 
 const submitIkc = async () => {
     try {
-        isLoading.value = true
-        const tiket = await TiketStore.laporIkcNew(dataTiket)
-        isLoading.value = false
-        noTiketIkc.value = tiket.data
-        snackbarAct("top", `Berhasil lapor IKC dengan nomor tiket: ${tiket.data}`, 'green')
+        isLoading.value = true;
+        const tiket = await TiketStore.laporIkcNew(dataTiket);
+        isLoading.value = false;
+        noTiketIkc.value = tiket.data;
+        snackbarAct("top", `Berhasil lapor IKC dengan nomor tiket: ${tiket.data}`, 'green');
+        dialog.value = false;
     } catch {
-        snackbarAct("top", `Gagal Lapor`, 'red')
-        isLoading.value = false
+        snackbarAct("top", `Gagal Lapor`, 'red');
+        isLoading.value = false;
     }
 }
 
