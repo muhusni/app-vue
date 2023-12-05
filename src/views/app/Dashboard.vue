@@ -64,12 +64,12 @@ import { Bar } from 'vue-chartjs'
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels)
-const kodeDokumen = ['30', '20', '660', '40', '23', '27'];
+const kodeDokumen = ['30', '20', '660', '40', '23', '27', '41'];
 let jumlahDokumen = reactive([]);
 const data = reactive({
     labels: ['PEB', 'PIB', 'Rush Handling', 'BC 4.0', 'BC 2.3', 'BC 2.7'],
     datasets: [{
-        label: 'Jumlah Dokumen CEISA 4.0 Hari ini',
+        label: 'Jumlah Dokumen Terdaftar CEISA 4.0 Hari ini',
         data: jumlahDokumen,
         backgroundColor: [
             'rgba(255, 99, 132, 0.7)',
@@ -90,15 +90,29 @@ const data = reactive({
         borderWidth: 1
     }]
 })
+
+
 const getJumlah = (kodeDokumen) => {
-    data.datasets[0].data = [];
-    kodeDokumen.forEach((kodeDok) => {
-        Ceisa40Store.getJumlahDokumen(kodeDok).then((response) => {
-            data.datasets[0].data.push(response.data)
+    const requests = kodeDokumen.map((kode) => Ceisa40Store.getJumlahDokumen(kode))
+    data.datasets[0].data = []
+    Promise.all(requests)
+        .then((response) => {
+            data.datasets[0].data = response;
+            // loading.value = false;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+            // loading.value = false;
         });
-    });
+    // kodeDokumen.forEach((kodeDok) => {
+    //     Ceisa40Store.getJumlahDokumen(kodeDok).then((response) => {
+    //         data.datasets[0].data.push(response.data)
+    //     });
+    // });
     console.log(jumlahDokumen);
 }
+
+
 
 const options = ref({
     scales: {
