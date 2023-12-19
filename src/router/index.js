@@ -7,6 +7,7 @@ import Login from "@/views/LoginView"
 import Tiket from "@/views/app/TiketView/TiketView"
 import Insw from "@/views/app/InswView"
 import Ceisa40PreRespon from "@/views/app/Ceisa40PreResponView"
+import BrowseCeisa40 from "@/views/app/BrowseCeisa40View"
 import Dashboard from "@/views/app/Dashboard"
 import { useUserStore } from '@/store/userStore'
 
@@ -59,7 +60,7 @@ const routes = [
         meta: {
           requiresAuth: true
         }
-      },      
+      },
       {
         path: '/tiket',
         name: 'Tiket BC Soetta',
@@ -80,6 +81,14 @@ const routes = [
         path: '/ceisa40prerespon',
         name: 'Ceisa 40 Pre-Respon',
         component: Ceisa40PreRespon,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/ceisa40',
+        name: 'Browse CEISA 4.0',
+        component: BrowseCeisa40,
         meta: {
           requiresAuth: true
         }

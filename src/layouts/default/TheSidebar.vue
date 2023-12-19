@@ -14,6 +14,7 @@ const menu = reactive([
   { title: "Tiket BC Soetta", icon: "mdi-ticket-account", to: "/tiket" },
   { title: "INSW", icon: "mdi-search-web", to: "/insw" },
   { title: "CEISA 4.0 Pre-Respon", icon: "mdi-magnify", to: "/ceisa40prerespon" },
+  { title: "Browse CEISA 4.0", icon: "mdi-file-search-outline", to: "/ceisa40" },
   { title: "Dashboard", icon: "mdi-chart-bar", to: "/dashboard" }
 ])
 
