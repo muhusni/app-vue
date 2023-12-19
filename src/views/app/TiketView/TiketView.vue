@@ -4,7 +4,7 @@
       <h3>Tiket BC Soetta </h3>
       <v-spacer></v-spacer>
       <v-btn :href="'https://duktek.bcsoetta.org/tickets/view/' + TiketStore.tiket.ID" target="_blank"
-        v-if="typeof TiketStore.tiket.ID !== 'undefined'" color="green" variant="outlined" append-icon="mdi-open-in-new">Go
+        v-if="typeof TiketStore.tiket.ID !== 'undefined'" color="primary" variant="outlined" append-icon="mdi-open-in-new">Go
         To Ticket</v-btn>
     </v-card-actions>
     <v-card-text>

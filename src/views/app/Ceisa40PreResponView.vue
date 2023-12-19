@@ -1,20 +1,21 @@
 <template>
-    <Ceisa40TableVue />
-    <v-btn color="success">
-        Send INSW for Selected Aju
-        <v-dialog v-model="dialog" activator="parent" width="auto">
-            <v-card>
-                <v-card-text>
-                    Kirim Data
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn color="danger" @click="dialog = false">Batal</v-btn>
-                    <v-btn color="success" @click="sendINSW()">KIRIM INSW</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-    </v-btn>
-    {{ getPenerimaanDokumen }}
+    <div class="d-flex justify-end mb-3">
+        <v-btn color="success">
+            Send INSW for Selected Aju
+            <v-dialog v-model="dialog" activator="parent" width="auto">
+                <v-card>
+                    <v-card-text>
+                        Kirim Data
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="danger" @click="dialog = false">Batal</v-btn>
+                        <v-btn color="success" @click="sendINSW()">KIRIM INSW</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-btn>
+    </div>
+    <Ceisa40TableVue query="LNSW - Penerimaan Dokumen"/>
 </template>
 <script setup>
 import Ceisa40TableVue from '@/components/Ceisa40Table.vue';

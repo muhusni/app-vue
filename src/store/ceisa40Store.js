@@ -28,6 +28,14 @@ export const useCeisa40Store = defineStore('ceisa40', {
     },
   },
   actions: {
+    async loginPortal() {
+      const login = await http.post(`/ceisa40/portal/login`)
+      return login
+    },
+    async loginCeisa40() {
+      const login = await http.post(`/ceisa40/login`)
+      return login
+    },
     async getDokumenCeisa40(id) {
       const dokCeisa40 = await http.get(`/ceisa40/dokumen/${id}`)
       this.dokCeisa40.push(...dokCeisa40.data.data)

@@ -72,6 +72,13 @@ import { useCeisa40Store } from '@/store/ceisa40Store';
 import { useAppStore } from '@/store/app';
 import http from '@/services/http';
 
+const props = defineProps({
+    query: {
+        type: String,
+        default: ""
+    }
+})
+
 const app = http;
 const appStore = useAppStore();
 const { dokCeisa40, getRiwayatRespon, getRiwayatStatus, kirimUlangINSW } = useCeisa40Store();
@@ -98,7 +105,7 @@ const openTabRespon = (idHeader, noAju) => {
 }
 
 const dialog = ref(false);
-const search = ref('');
+const search = ref(props.query);
 
 const showDialogKirim = (idHeader, kodeProses) => {
     if (kodeProses !== "105") return appStore.snackbarAct("top", "Gak bisa dikirim, Puh, Sepuh. Udah terkirim kali, Puh.", "red");

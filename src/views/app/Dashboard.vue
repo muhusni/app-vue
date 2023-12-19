@@ -31,8 +31,8 @@
             </v-card>
         </v-col>
     </v-row>
-    <v-row class="d-flex justify-center mt-1">
-        <v-col cols="12" md="7">
+    <v-row class="mt-1">
+        <v-col cols="12" md="8">
             <v-card v-if="data.datasets[0].data.length > 5" min-height="300">
                 <v-card-title>
                     <h1></h1>
@@ -42,6 +42,20 @@
                 </v-card-text>
             </v-card>
             <v-skeleton-loader v-else height="300" type="paragraph"></v-skeleton-loader>
+        </v-col>
+        <v-col cols="12" md="4" >
+            <v-skeleton-loader height="100" class="mb-3" type="paragraph" v-if="loadingLoginPortal"></v-skeleton-loader>
+            <v-card title="Portal CEISA 4.0" class="mb-3" :color="statusLoginPortal ? 'success' : 'error'" v-else>
+                <v-card-text>
+                    <h2> Status Login: {{  statusLoginPortal ? "UP" : "DOWN" }}</h2>
+                </v-card-text>
+            </v-card>
+            <v-skeleton-loader height="100" type="paragraph" v-if="loadingLoginCeisa40"></v-skeleton-loader>
+            <v-card title="CEISA 4.0 Pegawai" :color="statusLoginCeisa40 ? 'success' : 'error'" v-else>
+                <v-card-text>
+                    <h2> Status Login: {{  statusLoginCeisa40 ? "UP" : "DOWN" }}</h2>
+                </v-card-text>
+            </v-card>
         </v-col>
     </v-row>
 </template>
@@ -92,6 +106,8 @@ const data = reactive({
 })
 
 
+
+
 const getJumlah = (kodeDokumen) => {
     const requests = kodeDokumen.map((kode) => Ceisa40Store.getJumlahDokumen(kode))
     data.datasets[0].data = []
@@ -126,15 +142,39 @@ const options = ref({
 });
 
 const Ceisa40Store = useCeisa40Store();
+
+const statusLoginCeisa40 = ref(false);
+const statusLoginPortal = ref(false);
+const loadingLoginCeisa40 = ref(false)
+const loadingLoginPortal = ref(false)
+
+const loginPortal = async () => {
+    loadingLoginPortal.value = true
+    const login = await Ceisa40Store.loginPortal();
+    loadingLoginPortal.value = false
+    statusLoginPortal.value = login.data === 200 
+}
+
+const loginCeisa40 = async () => {
+    loadingLoginCeisa40.value = true
+    const login = await Ceisa40Store.loginCeisa40();
+    loadingLoginCeisa40.value = false
+    statusLoginCeisa40.value = login.data === 200
+}
+
 let intervalId
 onMounted(() => {
     Ceisa40Store.clearData();
     Ceisa40Store.getDokumenCeisa40PreRespon();
     getJumlah(kodeDokumen);
+    loginCeisa40();
+    loginPortal();
     intervalId = setInterval(() => {
         getJumlah(kodeDokumen);
         Ceisa40Store.clearData();
         Ceisa40Store.getDokumenCeisa40PreRespon();
+        loginCeisa40();
+        loginPortal();
     }, 120000);
 })
 

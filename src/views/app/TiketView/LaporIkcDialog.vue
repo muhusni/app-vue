@@ -4,7 +4,7 @@
     </v-btn>
     <v-dialog v-model="dialog" persistent width="1024">
         <form @submit.prevent="submitIkc">
-            <v-card :loading="isLoading">
+            <v-card :loading="isLoading" :disabled="isLoading">
                 <v-card-title>
                     <span class="text-h5">Lapor IKC</span>
                 </v-card-title>
@@ -131,9 +131,9 @@ const submitIkc = async () => {
 
 const formatJudul = () => {
     if (TiketStore.selectedAju.length > 0) {
-        return `${cekDokumen(TiketStore.tiket.categoryid)} ${TiketStore.selectedAju[0].status}`;
+        return `${cekDokumen(TiketStore.tiket.categoryid)} terhenti pada status ${TiketStore.selectedAju[0].status}`;
     } if (Ceisa40Store.selectedAju.length > 0) {
-        return `${cekDokumen(TiketStore.tiket.categoryid)} ${Ceisa40Store.selectedAju[0].namaProses}`;
+        return `${cekDokumen(TiketStore.tiket.categoryid)} terhenti pada status ${Ceisa40Store.selectedAju[0].namaProses}`;
     } else {
         return '';
     }

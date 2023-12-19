@@ -5,21 +5,23 @@
         :items="ajuFinal" class="elevation-1">
         <template v-slot:expanded-row="{ item }">
           <template v-for="aju in TiketStore.listAju" :key="aju">
-            <template v-if="aju.data.data_header[0].car === item.value.car">
-              <tr>
-                <td></td>
-                <td>No.</td>
-                <td :colspan="3">Status</td>
-                <td :colspan="4">Waktu Status</td>
-              </tr>
-              <tr v-for="(detail, index) in aju.data.data_detail" :key="detail.status">
-                <td></td>
-                <td> {{ index + 1 }}</td>
-                <td :colspan="2">{{ detail.remarks }}</td>
-                <td :colspan="4">
-                  <div class="d-flex justify-center">{{ detail.tanggal }}</div>
-                </td>
-              </tr>
+            <template v-if="(typeof aju.data.data_header !== 'undefined')">
+              <template v-if="aju.data.data_header[0]?.car === item.value.car">
+                <tr>
+                  <td></td>
+                  <td>No.</td>
+                  <td :colspan="3">Status</td>
+                  <td :colspan="4">Waktu Status</td>
+                </tr>
+                <tr v-for="(detail, index) in aju.data.data_detail" :key="detail.status">
+                  <td></td>
+                  <td> {{ index + 1 }}</td>
+                  <td :colspan="2">{{ detail.remarks }}</td>
+                  <td :colspan="4">
+                    <div class="d-flex justify-center">{{ detail.tanggal }}</div>
+                  </td>
+                </tr>
+              </template>
             </template>
           </template>
         </template>

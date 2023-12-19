@@ -64,7 +64,7 @@
 
       Atas kendala tersebut telah kami teruskan ke IKC dengan tiket {{ noTiketIkc }}. <br />
 
-      Anda dapat memantau tiket melalui <a href="https://linktr.ee/HumasBCSH">Bravo BC</a> atau dengan
+      Tiket dapat dipantau melalui <a href="https://linktr.ee/HumasBCSH">Bravo BC</a> atau dengan
       membalas pesan ini. <br>
 
     </v-card-text>
@@ -79,7 +79,7 @@
       </v-btn>
     </v-card-actions>
     <v-card-text ref="messageTiket" id="IdOfTextToCopy">
-      Selamat {{ currentTime() }}, Dokumen telah mendapat repson {{ responTiket() }}. Silakan dicek kembali. Terima
+      Selamat {{ currentTime() }}, dokumen telah mendapat respon {{ responTiket() }}. Silakan dicek kembali. Terima
       kasih.
     </v-card-text>
   </v-card>
@@ -145,6 +145,6 @@ const currentTime = () => current.getHours() < 11 ? 'pagi' : (current.getHours()
 // }
 
 const responTiket = () => {
-  return typeof TiketStore.listAju[0]?.data.data_header !== 'undefined' ? TiketStore.listAju[0]?.data.data_header[TiketStore.listAju.length - 1]?.status.replace(/<br>.+/g, '') : ''
+  return typeof TiketStore.listAju[0]?.data.data_header !== 'undefined' ? TiketStore.listAju[TiketStore.listAju.length - 1]?.data.data_header[0]?.status.replace(/<br>.+/g, '') : ''
 }
 </script>
