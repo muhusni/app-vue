@@ -90,6 +90,7 @@ const headers = [
     { title: 'Dokumen', key: 'namaDokumen' },
     { title: 'CAR', key: 'nomorAju' },
     { title: 'Nopen', key: 'nomorDaftar' },
+    { title: 'Tanggal Nopen', key: 'tanggalDaftar' },
     { title: 'Nama Perusahaan', key: 'namaPerusahaan' },
     { title: 'Nama PPJK', key: 'namaPpjk' },
     { title: 'status respon', key: 'namaRespon' },

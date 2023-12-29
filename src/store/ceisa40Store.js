@@ -10,9 +10,19 @@ export const useCeisa40Store = defineStore('ceisa40', {
     idHeaderCurrent: '',
     riwayatRespon: [],
     riwayatStatus: [],
+    query: {
+      kodeJalur: '',
+      namaPerusahaan: '',
+      nomorAju: '',
+      status: '',
+      kodeDokumen: '',
+      nomorDaftar: '',
+      tanggalDokumenStart: '',
+      tanggalDokumenEnd: '',
+    }
   }),
   getters: {
-    getPenerimaanDokumen (state) {
+    getPenerimaanDokumen(state) {
       return state.dokCeisa40.filter((aju) => aju.namaProses === 'LNSW - Penerimaan Dokumen');
     },
     getDokumenPerStatus: (state) => (namaProses, jenisDok) => {
@@ -43,8 +53,9 @@ export const useCeisa40Store = defineStore('ceisa40', {
     },
     async getDokumenCeisa40PreRespon() {
       this.dokCeisa40.length = 0
+      this.selectedAju.length = 0
       const dokCeisa40 = await http.get(`/ceisa40/dokumen/v1`)
-      this.dokCeisa40.push(...dokCeisa40.data.data.filter((aju) => (aju.nomorAju.substring(16, 18) === (new Date().getMonth()+1).toString()) && aju.nomorAju.substring(12, 16) !== '2022'))
+      this.dokCeisa40.push(...dokCeisa40.data.data.filter((aju) => (aju.nomorAju.substring(16, 18) === (new Date().getMonth() + 1).toString()) && aju.nomorAju.substring(12, 16) !== '2022'))
       return dokCeisa40
     },
     async getPdfCeisa40(idHeader, idRespon) {
@@ -78,8 +89,15 @@ export const useCeisa40Store = defineStore('ceisa40', {
       const jumlahDokumen = await http.get(`ceisa40/dokumen/jumlah/${kodeDokumen}`);
       return jumlahDokumen.data;
     },
+
+    async getDokumenCeisa40V2() {
+      this.dokCeisa40.length = 0
+      const requestCeisa40 = await http.post("ceisa40/dokumen", this.query);
+      this.dokCeisa40.push(...requestCeisa40.data.data)
+    },
+
     // const cekDokumen = (kategori) => kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '')
-    clearData () {
+    clearData() {
       this.dokCeisa40.length = 0
       this.selectedAju.length = 0
       this.riwayatRespon.length = 0

@@ -97,12 +97,19 @@ const cariTiket = async () => {
 
 const prosesPib = async () => {
     try {
+        const listAju = TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g);
+        const titleAju = TiketStore.tiket.title.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g);
+        let repliesAju = TiketStore.tiket.ticket_replies.map((aju) => aju.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g));
+        repliesAju = repliesAju.flat().filter(match => match !== null);
+        console.log(repliesAju);
+        if (titleAju) listAju.push(...titleAju)
+        if (repliesAju) listAju.push(...repliesAju)
 
-        if (TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) === null) {
+        if (listAju === null) {
             isLoading.value = false
             return
         }
-        regex.value = await TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g).map((x) => x.replace(/\-/g, ''));
+        regex.value = await listAju.map((x) => x.replace(/\-/g, ''));
         regex.value = [ ...new Set(regex.value)]
         isLoading.value = false
         regex.value.forEach((e) => {
