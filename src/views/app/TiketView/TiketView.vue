@@ -61,7 +61,7 @@
                   <span v-for="r in regex" :key="r"> {{ r }}<br></span>
                 </td>
               </tr>
-              <tr v-if="TiketStore.tiket?.ticket_IKC !== null">
+              <tr v-if="TiketStore.tiket?.ticket_IKC !== null && TiketStore.tiket.length !== 0">
                 <td>Status</td>
                 <td class="bgreen">
                   <v-chip variant="flat" color="green">
@@ -69,7 +69,7 @@
                   </v-chip>
                 </td>
               </tr>
-              <tr v-if="TiketStore.tiket?.ticket_IKC !== null">
+              <tr v-if="TiketStore.tiket?.ticket_IKC !== null && TiketStore.tiket.length !== 0">
                 <td>Tiket IKC</td>
                 <td >
                     {{ TiketStore.tiket.ticket_IKC }}
