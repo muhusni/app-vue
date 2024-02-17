@@ -15,10 +15,17 @@
             <v-text-field density="compact" maxlength="5" v-model="tiketId" variant="outlined" label="Cari Nomor Tiket"
               append-inner-icon="mdi-magnify" single-line hide-details @click:append-inner="cariTiket"></v-text-field>
           </v-form>
-          <v-form @submit.prevent="cariAju" v-else>
+          <v-form @submit.prevent="cariTiket" v-else>
             <v-textarea density="compact" rows="3" v-model="ajuInput" label="Masukkan Kumpulan Nomor Aju"
               variant="outlined"></v-textarea>
-            <v-btn type="submit" class="d-flex justify-content-end" color="success">Cari <v-icon>mdi-magnify</v-icon></v-btn>
+            <div class="d-flex">
+              <v-radio-group v-model="jenisDokumen" inline>
+                <v-radio label="PEB" value="PEB"></v-radio>
+                <v-radio label="PIB" value="PIB"></v-radio>
+              </v-radio-group>
+              <v-btn type="submit" class="d-flex justify-content-end" color="success">Cari
+                <v-icon>mdi-magnify</v-icon></v-btn>
+            </div>
           </v-form>
           <v-radio-group v-model="jenisPencarian" inline>
             <v-radio label="Tiket Duktek" value="tiket"></v-radio>
@@ -26,7 +33,7 @@
           </v-radio-group>
         </v-col>
       </v-row>
-      <v-card title="Detail Tiket" class="card-left bgreen mb-5" elevation="5">
+      <v-card v-if="jenisPencarian === 'tiket'" title="Detail Tiket" class="card-left bgreen mb-5" elevation="5">
         <v-card-text>
           <v-table hover>
             <tbody>
@@ -44,6 +51,39 @@
                   <div class="jarak" v-html="TiketStore.tiket.body"></div>
                 </td>
               </tr>
+              <tr>
+                <td>Jumlah Aju</td>
+                <td> {{ regex.length === 0 ? "" : regex.length }} </td>
+              </tr>
+              <tr>
+                <td>Detail Aju</td>
+                <td>
+                  <span v-for="r in regex" :key="r"> {{ r }}<br></span>
+                </td>
+              </tr>
+              <tr v-if="TiketStore.tiket?.ticket_IKC !== null">
+                <td>Status</td>
+                <td class="bgreen">
+                  <v-chip variant="flat" color="green">
+                    Sudah Lapor IKC
+                  </v-chip>
+                </td>
+              </tr>
+              <tr v-if="TiketStore.tiket?.ticket_IKC !== null">
+                <td>Tiket IKC</td>
+                <td >
+                    {{ TiketStore.tiket.ticket_IKC }}
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+          
+        </v-card-text>
+      </v-card>
+      <v-card v-else title="Detail Aju" class="card-left bgreen mb-5" elevation="5">
+        <v-card-text>
+          <v-table hover>
+            <tbody>
               <tr>
                 <td>Jumlah Aju</td>
                 <td> {{ regex.length === 0 ? "" : regex.length }} </td>
@@ -92,13 +132,15 @@ const Ceisa40Store = useCeisa40Store();
 const { snackbarAct } = useAppStore();
 let { isLoading } = storeToRefs(useAppStore())
 const jenisPencarian = ref('tiket');
+const jenisDokumen = ref('PEB');
+console.log(TiketStore.tiket?.ticket_IKC )
 
 const cariTiket = async () => {
-  if (tiketId.value === '') return;
+  if (tiketId.value === '' && jenisPencarian.value === 'tiket') return;
   TiketStore.clearData()
   Ceisa40Store.clearData()
   isLoading.value = true
-  await TiketStore.getTiket(tiketId.value);
+  if (jenisPencarian.value === 'tiket') await TiketStore.getTiket(tiketId.value);
   if (TiketStore.tiket.categoryid === 13) {
     prosesCn()
   } else {
@@ -111,8 +153,9 @@ const cariTiket = async () => {
 
 const prosesPib = async () => {
   try {
-    if (cariTiket.value == 'tiket') {
-      const listAju = TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) ?? [];
+    let listAju;
+    if (jenisPencarian.value == 'tiket') {
+      listAju = TiketStore.tiket.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) ?? [];
       const titleAju = TiketStore.tiket.title.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) ?? [];
       let repliesAju = TiketStore.tiket.ticket_replies.map((aju) => aju.body.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) ?? []);
       repliesAju = repliesAju.flat().filter(match => match !== null);
@@ -120,24 +163,37 @@ const prosesPib = async () => {
       if (titleAju) listAju.push(...titleAju)
       if (repliesAju) listAju.push(...repliesAju)
     } else {
-      const listAju = carAju.value.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) ?? [];
+      listAju = ajuInput.value.match(/[A-Z\d]{6}-?[A-Z\d]{6}-?[A-Z\d]{8}-?[A-Z\d]{6}/g) ?? [];
     }
 
     if (listAju === null) {
       isLoading.value = false
       return
     }
+
     regex.value = await listAju.map((x) => x.replace(/\-/g, ''));
     regex.value = [...new Set(regex.value)]
     isLoading.value = false
-    regex.value.forEach((e) => {
-      if (TiketStore.cekDokumen(TiketStore.tiket.categoryid) === 'PIB') {
-        TiketStore.getPib(e);
-      } else {
-        TiketStore.getPeb(e);
-      }
-      Ceisa40Store.getDokumenCeisa40(e);
-    });
+
+    if (jenisPencarian.value == 'tiket') {
+      regex.value.forEach((e) => {
+        if (TiketStore.cekDokumen(TiketStore.tiket.categoryid) === 'PIB') {
+          TiketStore.getPib(e);
+        } else {
+          TiketStore.getPeb(e);
+        }
+        Ceisa40Store.getDokumenCeisa40(e);
+      });
+    } else {
+      regex.value.forEach((e) => {
+        if (jenisDokumen.value === 'PIB') {
+          TiketStore.getPib(e);
+        } else {
+          TiketStore.getPeb(e);
+        }
+        Ceisa40Store.getDokumenCeisa40(e);
+      });
+    }
   } catch (e) {
     console.log(e)
     snackbarAct(true, "Data tidak ditemukan", "red");
