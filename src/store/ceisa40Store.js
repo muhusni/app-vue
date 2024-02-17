@@ -52,10 +52,16 @@ export const useCeisa40Store = defineStore('ceisa40', {
       return dokCeisa40
     },
     async getDokumenCeisa40PreRespon() {
+      let today = new Date();
+      
+      let currentMonth = today.getMonth() + 1;
+      let lastMonth = (currentMonth === 1) ? 12 : today.getMonth();
+      let formattedMonth = currentMonth.toString().padStart(2, '0');
+      let formattedLastmonth = lastMonth.toString().padStart(2, '0');
       this.dokCeisa40.length = 0
       this.selectedAju.length = 0
       const dokCeisa40 = await http.get(`/ceisa40/dokumen/v1`)
-      this.dokCeisa40.push(...dokCeisa40.data.data.filter((aju) => (aju.nomorAju.substring(16, 18) === (new Date().getMonth() + 1).toString()) && aju.nomorAju.substring(12, 16) !== '2022'))
+      this.dokCeisa40.push(...dokCeisa40.data.data.filter((aju) => (aju.nomorAju.substring(16, 18) === formattedMonth || aju.nomorAju.substring(16, 18) === formattedLastmonth) && aju.nomorAju.substring(12, 16) !== '2022'))
       return dokCeisa40
     },
     async getPdfCeisa40(idHeader, idRespon) {
@@ -95,7 +101,10 @@ export const useCeisa40Store = defineStore('ceisa40', {
       const requestCeisa40 = await http.post("ceisa40/dokumen", this.query);
       this.dokCeisa40.push(...requestCeisa40.data.data)
     },
-
+    async getRedis() {
+      const listRedis = await http.get("http://192.168.146.99:5000/list-redis")
+      return listRedis
+    },
     // const cekDokumen = (kategori) => kategori === 6 || kategori === 18 || kategori === 24 ? 'PIB' : (kategori === 7 || kategori === 20 || kategori === 25 ? 'PEB' : '')
     clearData() {
       this.dokCeisa40.length = 0

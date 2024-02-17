@@ -18,7 +18,7 @@
             </v-dialog>
         </v-btn>
     </div>
-    <Ceisa40TableVue query="LNSW - Penerimaan Dokumen"/>
+    <Ceisa40TableVue :page="-1" query="LNSW - Penerimaan Dokumen"/>
 </template>
 <script setup>
 import Ceisa40TableVue from '@/components/Ceisa40Table.vue';

@@ -10,7 +10,7 @@
                 flat hide-details variant="solo-filled"></v-text-field>
         </v-card-title>
         <v-card-text>
-            <v-data-table v-model:search="search" v-model="selectedAju" :headers="headers" show-select return-object hover :items="dokCeisa40"
+            <v-data-table v-model:search="search" :items-per-page="page" v-model="selectedAju" :headers="headers" show-select return-object hover :items="dokCeisa40"
                 class="elevation-1">
                 <template v-slot:item.actions="{ item }">
                     <!-- <a
@@ -76,6 +76,10 @@ const props = defineProps({
     query: {
         type: String,
         default: ""
+    },
+    page: {
+        type: Number,
+        default: 10
     }
 })
 

@@ -32,8 +32,8 @@
         </v-col>
     </v-row>
     <v-row class="mt-1">
-        <v-col cols="12" md="8">
-            <v-card v-if="data.datasets[0].data.length > 5" min-height="300">
+        <v-col cols="12" md="6">
+            <v-card v-if="data.datasets[0].data.length > 5" min-height="200">
                 <v-card-title>
                     <h1></h1>
                 </v-card-title>
@@ -41,21 +41,44 @@
                     <Bar v-if="data.datasets[0].data.length > 5" :data="data" :options="options" />
                 </v-card-text>
             </v-card>
-            <v-skeleton-loader v-else height="300" type="paragraph"></v-skeleton-loader>
+            <v-skeleton-loader v-else height="200" type="paragraph"></v-skeleton-loader>
         </v-col>
-        <v-col cols="12" md="4" >
+        <v-col cols="12" md="3">
+            <v-card title="Dokumen Merah PFPD Cuti/LP">
+                <v-card-text>
+                   <v-skeleton-loader v-if="isLoadingRedis" height="100" type="paragraph"></v-skeleton-loader>
+                    <v-list v-else>
+                        <v-list-item-group >
+                            <v-list-item v-for="(count, namaPfpd) in dokumenRedis" :key="namaPfpd">
+                                <v-list-item-content>
+                                    <v-list-item-title class="custom-font-size">{{ namaPfpd }}</v-list-item-title>
+                                    <v-list-item-subtitle class="custom-font-size">Count: {{ count }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-if="Object.keys(dokumenRedis).length === 0">
+                                <v-list-item-content>
+                                    <v-list-item-title>Tidak ada Dokumen</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-card-text>
+            </v-card>
+        </v-col>
+        <v-col cols="12" md="3">
             <v-skeleton-loader height="100" class="mb-3" type="paragraph" v-if="loadingLoginPortal"></v-skeleton-loader>
             <v-card title="Portal CEISA 4.0" class="mb-3" :color="statusLoginPortal ? 'success' : 'error'" v-else>
                 <v-card-text>
-                    <h2> Status Login: {{  statusLoginPortal ? "UP" : "DOWN" }}</h2>
+                    <h2> Status Login: {{ statusLoginPortal ? "UP" : "DOWN" }}</h2>
                 </v-card-text>
             </v-card>
             <v-skeleton-loader height="100" type="paragraph" v-if="loadingLoginCeisa40"></v-skeleton-loader>
             <v-card title="CEISA 4.0 Pegawai" :color="statusLoginCeisa40 ? 'success' : 'error'" v-else>
                 <v-card-text>
-                    <h2> Status Login: {{  statusLoginCeisa40 ? "UP" : "DOWN" }}</h2>
+                    <h2> Status Login: {{ statusLoginCeisa40 ? "UP" : "DOWN" }}</h2>
                 </v-card-text>
             </v-card>
+
         </v-col>
     </v-row>
 </template>
@@ -81,7 +104,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 const kodeDokumen = ['30', '20', '660', '40', '23', '27', '41'];
 let jumlahDokumen = reactive([]);
 const data = reactive({
-    labels: ['PEB', 'PIB', 'Rush Handling', 'BC 4.0', 'BC 2.3', 'BC 2.7'],
+    labels: ['PEB', 'PIB', 'Rush Handling', 'BC 4.0', 'BC 2.3', 'BC 2.7', 'BC 4.1'],
     datasets: [{
         label: 'Jumlah Dokumen Terdaftar CEISA 4.0 Hari ini',
         data: jumlahDokumen,
@@ -107,7 +130,6 @@ const data = reactive({
 
 
 
-
 const getJumlah = (kodeDokumen) => {
     const requests = kodeDokumen.map((kode) => Ceisa40Store.getJumlahDokumen(kode))
     data.datasets[0].data = []
@@ -126,6 +148,23 @@ const getJumlah = (kodeDokumen) => {
     //     });
     // });
     console.log(jumlahDokumen);
+}
+
+const dokumenRedis = ref({});
+const isLoadingRedis = ref(false)
+const getJumlahRedis = async () => {
+    isLoadingRedis.value = true
+    dokumenRedis.value = {}
+    const listRedis = await Ceisa40Store.getRedis()
+    console.log(listRedis)
+    // Iterate through the data and count occurrences
+    const counts = {};
+    listRedis.data.forEach(entry => {
+        const namaPfpd = entry.namaPfpd;
+        counts[namaPfpd] = (counts[namaPfpd] || 0) + 1;
+    });
+    dokumenRedis.value = counts;
+    isLoadingRedis.value = false
 }
 
 
@@ -152,7 +191,7 @@ const loginPortal = async () => {
     loadingLoginPortal.value = true
     const login = await Ceisa40Store.loginPortal();
     loadingLoginPortal.value = false
-    statusLoginPortal.value = login.data === 200 
+    statusLoginPortal.value = login.data === 200
 }
 
 const loginCeisa40 = async () => {
@@ -163,10 +202,12 @@ const loginCeisa40 = async () => {
 }
 
 let intervalId
+let intervalId2
 onMounted(() => {
     Ceisa40Store.clearData();
     Ceisa40Store.getDokumenCeisa40PreRespon();
     getJumlah(kodeDokumen);
+    getJumlahRedis();
     loginCeisa40();
     loginPortal();
     intervalId = setInterval(() => {
@@ -176,9 +217,16 @@ onMounted(() => {
         loginCeisa40();
         loginPortal();
     }, 120000);
+
+    intervalId2 = setInterval(() => {
+        getJumlahRedis();
+    }, 600000);
 })
 
-onUnmounted(() => clearInterval(intervalId))
+onUnmounted(() => {
+    clearInterval(intervalId)
+    clearInterval(intervalId2)
+})
 
 
 // const ctx = document.getElementById('myChart');
@@ -203,3 +251,8 @@ onUnmounted(() => clearInterval(intervalId))
 // });
 
 </script>
+<style>
+.custom-font-size {
+  font-size: 20px; /* Adjust the font size as needed */
+}
+</style>
