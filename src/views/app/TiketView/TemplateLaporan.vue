@@ -145,6 +145,6 @@ const currentTime = () => current.getHours() < 11 ? 'pagi' : (current.getHours()
 // }
 
 const responTiket = () => {
-  return typeof TiketStore.listAju[0]?.data.data_header !== 'undefined' ? TiketStore.listAju[TiketStore.listAju.length - 1]?.data.data_header[0]?.status.replace(/<br>.+/g, '') : ''
+  return typeof TiketStore.listAju[0]?.data.data_header !== 'undefined' ? TiketStore.listAju[TiketStore.listAju?.length - 1]?.data.data_header[0]?.status.replace(/<br>.+/g, '') : ''
 }
 </script>
