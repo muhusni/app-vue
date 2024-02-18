@@ -7,6 +7,8 @@ import { useCeisa40Store } from './ceisa40Store'
 export const useTiketStore = defineStore('tiket', {
   state: () => ({
     tiket: [],
+    tiketAll: [],
+    totalTiketItems: 0,
     listAju: [],
     ajuFinal: [],
     selectedAju: [],
@@ -20,6 +22,17 @@ export const useTiketStore = defineStore('tiket', {
       this.tiket = tiket.data
       this.listAju.length = 0
       this.selectedAju.length = 0
+      return tiket
+      // } catch (error) {
+      //   return error
+      // }
+    },
+    async getAllTiket({ page, itemsPerPage, sortBy }) {
+      // try {
+      this.tiketAll.length = 0
+      const tiket = await tiketServices.getAllTiket({ page, itemsPerPage, sortBy })
+      this.tiketAll = tiket.data
+      this.totalTiketItems = tiket.data.total
       return tiket
       // } catch (error) {
       //   return error

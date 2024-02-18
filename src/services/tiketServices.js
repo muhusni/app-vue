@@ -11,12 +11,22 @@ export default {
       // throw errorf 
     }
   },
-  async getPib (id) {
+  async getAllTiket({ page, itemsPerPage, sortBy }) {
+    try {
+      const response = await http.get(`/tiket`, { params: { page: page, search: 'SANBE' } })
+      const data = response
+      // const token = response.data.token
+      return data
+    } catch (error) {
+      // throw errorf 
+    }
+  },
+  async getPib(id) {
     const response = await http.get(`/pib/${id}`)
     const data = response.data
     return data
   },
-  async getPeb (id) {
+  async getPeb(id) {
     const response = await http.get(`/peb/${id}`)
     const data = response.data
     return data

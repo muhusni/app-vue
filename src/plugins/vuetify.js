@@ -7,8 +7,8 @@
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
-import { VDataTable } from 'vuetify/labs/VDataTable'
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
+// import { VDataTable } from 'vuetify/labs/VDataTable'
+// import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 
 // Composables
 import { createVuetify } from 'vuetify'
@@ -37,6 +37,6 @@ export default createVuetify({
     iconfont: 'mdi', // default - only for display purposes
   },
   components: {
-    VDataTable, VSkeletonLoader
+    // VDataTable, VSkeletonLoader
   },
 })
