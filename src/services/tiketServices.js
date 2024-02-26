@@ -11,9 +11,9 @@ export default {
       // throw errorf 
     }
   },
-  async getAllTiket({ page, itemsPerPage, sortBy }) {
+  async getAllTiket({ page, itemsPerPage, sortBy, search }) {
     try {
-      const response = await http.get(`/tiket`, { params: { page: page, search: 'SANBE' } })
+      const response = await http.get(`/tiket`, { params: { page: page, search: search } })
       const data = response
       // const token = response.data.token
       return data

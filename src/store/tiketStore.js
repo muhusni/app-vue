@@ -27,10 +27,10 @@ export const useTiketStore = defineStore('tiket', {
       //   return error
       // }
     },
-    async getAllTiket({ page, itemsPerPage, sortBy }) {
+    async getAllTiket({ page, itemsPerPage, sortBy, search }) {
       // try {
       this.tiketAll.length = 0
-      const tiket = await tiketServices.getAllTiket({ page, itemsPerPage, sortBy })
+      const tiket = await tiketServices.getAllTiket({ page, itemsPerPage, sortBy, search })
       this.tiketAll = tiket.data
       this.totalTiketItems = tiket.data.total
       return tiket

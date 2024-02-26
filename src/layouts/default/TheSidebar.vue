@@ -16,7 +16,8 @@ const menu = reactive([
   { title: "CEISA 4.0 Pre-Respon", icon: "mdi-magnify", to: "/ceisa40prerespon" },
   { title: "Browse CEISA 4.0", icon: "mdi-file-search-outline", to: "/ceisa40" },
   { title: "Dashboard", icon: "mdi-chart-bar", to: "/dashboard" },
-  { title: "Tiket by Tiket IKC", icon: "mdi-magnify", to: "/tiket-ikc" }
+  { title: "Tiket by Tiket IKC", icon: "mdi-magnify", to: "/tiket-ikc" },
+  { title: "Layanan Data Duktek", icon: "mdi-database-arrow-down", to: "/layanan-data" }
 ])
 
 </script>

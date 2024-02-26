@@ -8,6 +8,6 @@ import { onMounted } from 'vue';
 
 const TiketStore = useTiketStore();
 onMounted(() => {
-    TiketStore.getAllTiket()
+    TiketStore.getAllTiket
 })
 </script>

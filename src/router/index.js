@@ -10,6 +10,7 @@ import Ceisa40PreRespon from "@/views/app/Ceisa40PreResponView"
 import BrowseCeisa40 from "@/views/app/BrowseCeisa40View"
 import Dashboard from "@/views/app/Dashboard"
 import TiketAllView from "@/views/app/TiketAllView"
+import LayananData from "@/views/app/LayananDataView"
 import { useUserStore } from '@/store/userStore'
 
 
@@ -106,6 +107,14 @@ const routes = [
         path: '/tiket-ikc',
         name: 'Tiket by Tiket IKC',
         component: TiketAllView,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: '/layanan-data',
+        name: 'Layanan Data Duktek',
+        component: LayananData,
         meta: {
           requiresAuth: true
         }
