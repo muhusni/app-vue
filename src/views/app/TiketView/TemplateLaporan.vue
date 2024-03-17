@@ -83,6 +83,20 @@
       kasih.
     </v-card-text>
   </v-card>
+  <v-card class="card-left bgreen mt-3 mb-5 overflow-y-auto" max-height="600" elevation="5" :loading="isLoading">
+    <v-card-actions>
+      <h3>Template Jawaban Tiket</h3>
+      <v-spacer></v-spacer>
+      <v-btn @click="copyButtonTiket2">
+        Copy
+        <v-icon end icon="mdi-content-copy"></v-icon>
+      </v-btn>
+    </v-card-actions>
+    <v-card-text ref="messageTiket2" id="IdOfTextToCopy2">
+      Selamat {{ currentTime() }}, respon {{ responTiket() }} telah kami kirim ulang. Silakan dicek kembali. Terima
+      kasih.
+    </v-card-text>
+  </v-card>
 </template>
 <script setup>
 import LaporIkcDialog from './LaporIkcDialog.vue';
@@ -97,6 +111,7 @@ import { useCeisa40Store } from '@/store/ceisa40Store';
 const message = ref(null);
 const message2 = ref(null);
 const messageTiket = ref(null);
+const messageTiket2 = ref(null);
 // const judul = ref("");
 const TiketStore = useTiketStore();
 const Ceisa40Store = useCeisa40Store();
@@ -115,6 +130,11 @@ const copyButton = () => {
 
 const copyButtonTiket = () => {
   toClipboard(messageTiket.value.$el.innerText)
+  snackbarAct(true, "Text telah disalin", "green");
+}
+
+const copyButtonTiket2 = () => {
+  toClipboard(messageTiket2.value.$el.innerText)
   snackbarAct(true, "Text telah disalin", "green");
 }
 
@@ -145,6 +165,8 @@ const currentTime = () => current.getHours() < 11 ? 'pagi' : (current.getHours()
 // }
 
 const responTiket = () => {
-  return typeof TiketStore.listAju[0]?.data.data_header !== 'undefined' ? TiketStore.listAju[TiketStore.listAju?.length - 1]?.data.data_header[0]?.status.replace(/<br>.+/g, '') : ''
+  return `${typeof TiketStore.selectedAju[TiketStore.selectedAju.length - 1]?.status === 'undefined' ? '' : TiketStore.selectedAju[TiketStore.selectedAju.length - 1]?.status} 
+  ${typeof Ceisa40Store.selectedAju[Ceisa40Store.selectedAju.length-1]?.namaProses === 'undefined' ? '' : Ceisa40Store.selectedAju[Ceisa40Store.selectedAju.length-1]?.namaProses}`
 }
+
 </script>

@@ -24,25 +24,25 @@
                             text-box-multiple-outline
                         </v-icon> Draf</a> -->
                     <v-chip-group color="blue">
-                        <a v-if="dokCeisa40[item.index].idRespon !== null"
-                            :href="`${app.defaults.baseURL}/ceisa40/download/${dokCeisa40[item.index].idHeader}/${dokCeisa40[item.index].idRespon}`"><v-chip>
+                        <a v-if="item.idRespon !== null"
+                            :href="`${app.defaults.baseURL}/ceisa40/download/${item.idHeader}/${item.idRespon}`"><v-chip>
                                 <v-icon size="small" class="me-2">
                                     mdi-download
                                 </v-icon> Respon</v-chip>
                         </a>
                         <a
-                            :href="`${app.defaults.baseURL}/ceisa40/download/draf/${dokCeisa40[item.index].kodeDokumen}/${dokCeisa40[item.index].idHeader}`"><v-chip>
+                            :href="`${app.defaults.baseURL}/ceisa40/download/draf/${item.kodeDokumen}/${item.idHeader}`"><v-chip>
                                 <v-icon size="small" class="me-2">
                                     mdi-download
                                 </v-icon> Draf</v-chip>
                         </a>
-                        <v-chip @click="openTabRespon(dokCeisa40[item.index].idHeader, dokCeisa40[item.index].nomorAju)">
+                        <v-chip @click="openTabRespon(item.idHeader, item.nomorAju)">
                             <v-icon size="small">
                                 mdi-magnify
                             </v-icon>
                         </v-chip>
                         <v-chip
-                            @click="showDialogKirim(dokCeisa40[item.index].idHeader, dokCeisa40[item.index].kodeProses)">
+                            @click="showDialogKirim(item.idHeader, item.kodeProses)">
                             Kirim Ulang INSW
                         </v-chip>
                     </v-chip-group>
@@ -113,7 +113,7 @@ const dialog = ref(false);
 const search = ref(props.query);
 
 const showDialogKirim = (idHeader, kodeProses) => {
-    if (kodeProses !== "105") return appStore.snackbarAct("top", "Gak bisa dikirim, Puh, Sepuh. Udah terkirim kali, Puh.", "red");
+    if (!(kodeProses === "105" || kodeProses === "104")) return appStore.snackbarAct("top", "Gak bisa dikirim, Puh, Sepuh. Udah terkirim kali, Puh.", "red");
     dialog.value = true
     idHeaderCurrent.value = idHeader
 }

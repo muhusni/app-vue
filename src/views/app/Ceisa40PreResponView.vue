@@ -82,7 +82,7 @@ const sendINSW = async () => {
 
     for (const aju of Ceisa40Store.selectedAju) {
         try {
-            if (aju.kodeProses !== "105") throw 'error';
+            if (!(aju.kodeProses === "105" || aju.kodeProses === "104")) throw 'error';
             const response = await Ceisa40Store.kirimUlangINSW(aju.idHeader);
 
             if (response.status === 200) {

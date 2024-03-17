@@ -6,7 +6,7 @@
         <template v-slot:expanded-row="{ item }">
           <template v-for="aju in TiketStore.listAju" :key="aju">
             <template v-if="(typeof aju.data.data_header !== 'undefined')">
-              <template v-if="aju.data.data_header[0]?.car === item.value.car">
+              <template v-if="aju.data.data_header[0]?.car === item.car">
                 <tr>
                   <td></td>
                   <td>No.</td>
