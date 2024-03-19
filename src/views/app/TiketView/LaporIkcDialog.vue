@@ -34,6 +34,9 @@
                                     variant="solo-filled"></v-textarea>
                             </v-col>
                         </v-row>
+                        <v-row>
+                            <v-file-input label="File input" variant="solo-filled" v-model="dataTiket.fileName"></v-file-input>
+                        </v-row>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
@@ -70,7 +73,8 @@ const dataTiket = reactive({
     bisnisProses: '',
     subProses: '',
     judulTiketIkc: '',
-    uraian: ''
+    uraian: '',
+    fileName: ''
 });
 
 const tiketProses = ref([
@@ -80,7 +84,7 @@ const tiketProses = ref([
     },
     {
         namaProses: 'CEISA Impor',
-        subProses: ['Submit Data', 'Validasi', 'Konfirmasi Pembayaran', 'Analyzing Pointl', 'Penjaluran', 'Pemeriksaan Barang', 'Pemeriksaan Dokumen', 'SPPB', 'Gate', 'SPTNP', 'Pengeluaran Barang', 'Other']
+        subProses: ['Submit Data', 'Validasi', 'Konfirmasi Pembayaran', 'Analyzing Point', 'Penjaluran', 'Pemeriksaan Barang', 'Pemeriksaan Dokumen', 'SPPB', 'Gate', 'SPTNP', 'Pengeluaran Barang', 'Other']
     },
     {
         namaProses: 'CEISA TPB',
@@ -118,7 +122,13 @@ const openDialog = () => {
 const submitIkc = async () => {
     try {
         isLoading.value = true;
-        const tiket = await TiketStore.laporIkcNew(dataTiket);
+        // construct uploaded file
+        const formData = new FormData();
+        Object.keys(dataTiket).forEach(key => formData.append(key, dataTiket[key]));
+        dataTiket.fileName.forEach(file => formData.append('files', file));
+
+        // submit data
+        const tiket = await TiketStore.laporIkcNew(formData);
         isLoading.value = false;
         noTiketIkc.value = tiket.data;
         snackbarAct("top", `Berhasil lapor IKC dengan nomor tiket: ${tiket.data}`, 'green');

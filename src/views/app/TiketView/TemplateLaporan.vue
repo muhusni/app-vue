@@ -62,10 +62,8 @@
 
       Mohon maaf atas ketidaknyamanannya. <br />
 
-      Atas kendala tersebut telah kami teruskan ke IKC dengan tiket {{ noTiketIkc }}. <br />
-
-      Tiket dapat dipantau melalui <a href="https://linktr.ee/HumasBCSH">Bravo BC</a> atau dengan
-      membalas pesan ini. <br>
+      Atas kendala tersebut telah kami teruskan ke IKC dengan tiket {{ noTiketIkc }}. 
+      Tiket dapat dipantau melalui <a href="https://linktr.ee/HumasBCSH">Bravo BC</a> atau menghubungi layanan WhatsApp Direktorat IKC di 082310460961. Terima kasih.
 
     </v-card-text>
   </v-card>

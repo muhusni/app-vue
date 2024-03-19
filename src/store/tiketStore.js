@@ -87,7 +87,11 @@ export const useTiketStore = defineStore('tiket', {
     },
 
     async laporIkcNew(data) {
-      const tiket = await axios.post('http://192.168.146.99:5000/laporikc', data)
+      const tiket = await axios.post('http://192.168.146.99:5000/laporikc', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return tiket
     },
 

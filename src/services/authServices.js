@@ -27,9 +27,10 @@ export default {
       const { status, data: user } = response
       return { status, user }
     } catch (error) {
+      return !(error.status === 401)
       // console.log(error)
       // throw error
-      return false
+      // return false
     }
   }
 }
